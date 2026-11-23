@@ -1,0 +1,257 @@
+/* X Muse Tips public edition v1 — plain, readable styling.
+   Theming follows the modern-web-guidance "dark-mode" guide:
+   color-scheme on :root + <meta name="color-scheme">, tokens switched
+   via prefers-color-scheme. */
+
+:root {
+  color-scheme: light dark;
+  --bg: #ffffff;
+  --fg: #1c1e21;
+  --muted: #5a6068;
+  --border: #d8dce1;
+  --surface: #f5f6f8;
+  --accent: #0b5cad;
+  --accent-fg: #ffffff;
+  --code-bg: #eef0f3;
+  accent-color: var(--accent);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16181c;
+    --fg: #e6e8eb;
+    --muted: #a2a9b3;
+    --border: #33373e;
+    --surface: #1e2126;
+    --accent: #6db3f2;
+    --accent-fg: #0d1520;
+    --code-bg: #262a31;
+  }
+}
+
+* { box-sizing: border-box; }
+
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans",
+    "Noto Sans JP", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.85;
+  -webkit-text-size-adjust: 100%;
+}
+
+.wrap {
+  max-width: 52rem;
+  margin-inline: auto;
+  padding: 1rem 1.1rem 3rem;
+}
+
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, input:focus-visible,
+.table-wrapper:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+header h1 {
+  font-size: 1.55rem;
+  line-height: 1.4;
+  margin: 0.8rem 0 0.6rem;
+}
+
+.intro { color: var(--fg); }
+.intro ul { margin: 0.4rem 0; padding-inline-start: 1.4rem; }
+
+/* --- controls --- */
+.controls {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  padding: 0.9rem 1rem;
+  margin: 1.2rem 0 1.4rem;
+}
+
+.search-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+.search-row label { font-weight: 600; }
+.search-row input[type="search"] {
+  flex: 1 1 12rem;
+  font: inherit;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--fg);
+}
+.search-row button, .chip {
+  font: inherit;
+  font-size: 0.92rem;
+  padding: 0.32rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--fg);
+  cursor: pointer;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.7rem;
+}
+.chip[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-fg);
+}
+.chip-count {
+  margin-inline-start: 0.35em;
+  font-size: 0.82em;
+  opacity: 0.75;
+}
+#result-count {
+  margin: 0.6rem 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+/* --- summary table (responsive-table guide: semantic table, scrollable
+   region with sticky header, stacked cards via container query) --- */
+.table-wrapper {
+  overflow: auto;
+  max-block-size: min(72vh, 640px);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  container-type: inline-size;
+}
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  font-size: 0.94rem;
+  line-height: 1.6;
+}
+thead th {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 1;
+  background: var(--surface);
+  text-align: start;
+  padding: 0.5rem 0.6rem;
+  border-block-end: 2px solid var(--border);
+  white-space: nowrap;
+}
+tbody th, tbody td {
+  padding: 0.45rem 0.6rem;
+  border-block-end: 1px solid var(--border);
+  vertical-align: top;
+}
+tbody th { text-align: end; font-weight: 600; white-space: nowrap; }
+tbody tr:last-child th, tbody tr:last-child td { border-block-end: none; }
+
+@container (width < 640px) {
+  table, thead, tbody, tr, th, td { display: block; }
+  thead { display: none; }
+  tbody tr {
+    padding: 0.55rem 0.7rem;
+    border-block-end: 1px solid var(--border);
+  }
+  tbody th, tbody td {
+    border-block-end: none;
+    padding: 0.1rem 0;
+    text-align: start;
+  }
+  tbody th { font-size: 1rem; }
+  tbody th::before { content: "# "; color: var(--muted); }
+  tbody td::before {
+    content: attr(data-label) ": ";
+    color: var(--muted);
+    font-size: 0.85em;
+  }
+}
+
+/* --- category index --- */
+#category-index h3 { margin: 1.4rem 0 0.4rem; font-size: 1.05rem; }
+#category-index ul { padding-inline-start: 1.4rem; }
+
+/* --- tip articles --- */
+main { margin-top: 1rem; }
+article.tip, section.extra {
+  border-top: 2px solid var(--border);
+  padding: 1.1rem 0 0.6rem;
+  margin-top: 1.6rem;
+  scroll-margin-top: 0.8rem;
+}
+article.tip h2, section.extra h2 {
+  font-size: 1.28rem;
+  line-height: 1.5;
+  margin: 0 0 0.5rem;
+}
+article.tip h3, section.extra h3 {
+  font-size: 1.05rem;
+  margin: 1.3rem 0 0.35rem;
+  padding-inline-start: 0.55rem;
+  border-inline-start: 4px solid var(--accent);
+}
+article.tip ul, article.tip ol,
+section.extra ul, section.extra ol { padding-inline-start: 1.5rem; }
+article.tip li, section.extra li { margin: 0.15rem 0; }
+article.tip p, section.extra p { margin: 0.55rem 0; }
+
+code {
+  background: var(--code-bg);
+  border-radius: 4px;
+  padding: 0.05em 0.35em;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.88em;
+  overflow-wrap: anywhere;
+}
+pre {
+  background: var(--code-bg);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  overflow-x: auto;
+}
+pre code { background: none; padding: 0; }
+blockquote {
+  margin: 0.7rem 0;
+  padding: 0.2rem 0 0.2rem 0.9rem;
+  border-inline-start: 4px solid var(--border);
+  color: var(--muted);
+}
+article.tip table, section.extra table {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+article.tip th, article.tip td,
+section.extra th, section.extra td {
+  border: 1px solid var(--border);
+  padding: 0.35rem 0.55rem;
+  text-align: start;
+}
+.back { text-align: end; font-size: 0.9rem; }
+.back a { text-decoration: none; }
+
+footer {
+  margin-top: 2.5rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.8rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 640px) {
+  body { font-size: 15.5px; }
+  header h1 { font-size: 1.32rem; }
+  article.tip h2, section.extra h2 { font-size: 1.15rem; }
+}
